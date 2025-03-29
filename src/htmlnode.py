@@ -22,9 +22,27 @@ class HTMLNode():
     
 class LeafNode(HTMLNode):
     def __init__(self, tag, value, props=None):
-        super().__init__(tag, value, [], props)
+        super().__init__(tag, value, None, props)
         
     def to_html(self):
         if self.value is None or self.value == "":
             raise ValueError("Leaf nodes must have a value")
         return f"<{self.tag}{HTMLNode.props_to_html(self)}>{self.value}</{self.tag}>"
+    
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+
+    def to_html(parent_dir, current_dir=""):
+        if parent_dir.tag == None:
+            raise ValueError("Must contain a tag")
+        if parent_dir.children == None:
+            raise ValueError("Must contain children to be parent")
+        children_html = ""
+        for child in parent_dir.children:
+            if child.children == None:
+                children_html += f"<{child.tag}{HTMLNode.props_to_html(child)}>{child.value}</{child.tag}>"
+            else:
+                children_html += ParentNode.to_html(child, children_html)
+        
+        return f"<{parent_dir.tag}{HTMLNode.props_to_html(parent_dir)}>{children_html}</{parent_dir.tag}>"

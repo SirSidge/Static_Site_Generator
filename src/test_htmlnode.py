@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_value(self):
@@ -51,6 +51,22 @@ class TestHTMLNode(unittest.TestCase):
         node = LeafNode("div", "")
         with self.assertRaises(ValueError):
             node.to_html()
+
+    def test_nested_children(self):
+        child_node = LeafNode("div", "Click me!")
+        child_node2 = LeafNode("c", "Final value")
+        child_node3 = ParentNode("a", [child_node, child_node2])
+        node = ParentNode("p", [child_node3,])
+        self.assertEqual(node.to_html(), "<p><a><div>Click me!</div><c>Final value</c></a></p>")
+
+        node2 = ParentNode("p", [child_node,])
+        self.assertEqual(node2.to_html(), f"<p><div>Click me!</div></p>")
+    
+    def test_children_props(self):
+        child_node = LeafNode("b", "I don't have children", {"href": "www.boot.dev"})
+        child_node2 = ParentNode("div", [child_node,])
+        node = ParentNode("d", [child_node2,])
+        self.assertEqual(node.to_html(), f"<d><div><b href='www.boot.dev'>I don't have children</b></div></d>")
     
 if __name__ == "__main__":
     unittest.main()
