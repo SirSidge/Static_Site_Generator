@@ -16,7 +16,6 @@ class HTMLNode():
             props += f" {key}='{value}'"
         return props
     
-    
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
     
@@ -33,16 +32,16 @@ class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
 
-    def to_html(parent_dir, current_dir=""):
-        if parent_dir.tag == None:
+    def to_html(self):
+        if self.tag == None:
             raise ValueError("Must contain a tag")
-        if parent_dir.children == None:
+        if self.children == None:
             raise ValueError("Must contain children to be parent")
         children_html = ""
-        for child in parent_dir.children:
+        for child in self.children:
             if child.children == None:
                 children_html += f"<{child.tag}{HTMLNode.props_to_html(child)}>{child.value}</{child.tag}>"
             else:
-                children_html += ParentNode.to_html(child, children_html)
+                children_html += ParentNode.to_html(child)
         
-        return f"<{parent_dir.tag}{HTMLNode.props_to_html(parent_dir)}>{children_html}</{parent_dir.tag}>"
+        return f"<{self.tag}{HTMLNode.props_to_html(self)}>{children_html}</{self.tag}>"
