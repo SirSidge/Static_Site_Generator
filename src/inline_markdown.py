@@ -30,25 +30,29 @@ def extract_markdown_links(text):
     return matches
 
 def split_nodes_image(old_nodes):
-    pass
+    og_string = old_nodes[0].text
+    extracted_images = extract_markdown_images(old_nodes[0].text)
+    new_string = re.split(r"!\[.*?\]|\(.*?\)", og_string)
+    counter = 0
+    for i in range(len(new_string)):
+        if i % 2 == 0:
+            new_string[i] = TextNode(new_string[i], TextType.TEXT)
+        else:
+            new_string[i] = TextNode(extracted_images[counter][0], TextType.IMAGE, extracted_images[counter][1])
+            counter += 1
+    new_string.pop((len(new_string) - 1))
+    return new_string
 
 def split_nodes_link(old_nodes):
-    new_string = []
     og_string = old_nodes[0].text
-    print(og_string)
-    delimiter = extract_markdown_links(old_nodes[0].text)
-    print(delimiter)
-    #new_string = og_string.split(delimiter[0][0], 1)
-    new_string = re.split(r"\[.*?\)", og_string)
-    print(new_string)
-    """new_nodes = []
-    extracted_links = []
-    for old_node in old_nodes:
-        extracted_links = extract_markdown_links(old_node.text)
-        for i in range(len(extracted_links)):
-            extracted_links[i] = TextNode(extracted_links[i][0], TextType.LINK,)
-        new_nodes.extend(extracted_links)
-    print(new_nodes)"""
-    pass
-
-# Ok so I am on to something here. I just need to find a way to ignore the empty list item. It might not always be the last one, maybe .remove("").
+    extracted_links = extract_markdown_links(old_nodes[0].text)
+    new_string = re.split(r"\[.*?\]|\(.*?\)", og_string)
+    counter = 0
+    for i in range(len(new_string)):
+        if i % 2 == 0:
+            new_string[i] = TextNode(new_string[i], TextType.TEXT)
+        else:
+            new_string[i] = TextNode(extracted_links[counter][0], TextType.LINK, extracted_links[counter][1])
+            counter += 1
+    new_string.pop((len(new_string) - 1))
+    return new_string

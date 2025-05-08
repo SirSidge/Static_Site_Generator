@@ -61,7 +61,22 @@ class TestExtractMarkdownLinks(unittest.TestCase):
             [("to boot dev", "https://www.boot.dev")]
         )
 
-#class TestSplitNodesImage(unittest.TestCase):
+class TestSplitNodesImage(unittest.TestCase):
+    def test_split(self):
+        node = TextNode(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            TextType.TEXT,
+        )
+        new_node = split_nodes_image([node])
+        self.assertEqual(
+            new_node,
+            [
+                TextNode("This is text with an ", TextType.TEXT),
+                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.TEXT),
+                TextNode("second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"),
+            ]
+        )
 
 class TestSplitNodesLink(unittest.TestCase):
     def test_split(self):
@@ -70,7 +85,7 @@ class TestSplitNodesLink(unittest.TestCase):
             TextType.TEXT,
         )
         new_node = split_nodes_link([node])
-        """self.assertEqual(
+        self.assertEqual(
             new_node,
             [
                 TextNode("This is text with a link ", TextType.TEXT),
@@ -78,4 +93,4 @@ class TestSplitNodesLink(unittest.TestCase):
                 TextNode(" and ", TextType.TEXT),
                 TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),
             ]
-        )"""
+        )
