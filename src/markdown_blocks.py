@@ -1,4 +1,5 @@
 from enum import Enum
+from htmlnode import HTMLNode
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -32,6 +33,7 @@ def block_to_block_type(block):
                 return BlockType.PARAGRAPH
             i += 1
         return BlockType.OLIST
+    
     return BlockType.PARAGRAPH
 
 def markdown_to_blocks(markdown):
@@ -40,3 +42,26 @@ def markdown_to_blocks(markdown):
         if block == "":
             blocks.remove(block)
     return blocks
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    #Still need the type
+    nodes = []
+    for block in blocks:
+        nodes.append(HTMLNode(markdown_type_to_tag(block_to_block_type(block)), block))
+    #print(nodes)
+    return nodes
+
+def markdown_type_to_tag(type):
+    if type is BlockType.PARAGRAPH:
+        return "p"
+    if type is BlockType.HEADING:
+        return "div"
+    if type is BlockType.CODE:
+        return "code"
+    if type is BlockType.QUOTE:
+        return "quote"
+    if type is BlockType.ULIST:
+        return "ul"
+    if type is BlockType.OLIST:
+        return "ol"

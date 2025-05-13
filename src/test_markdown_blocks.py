@@ -1,6 +1,7 @@
 import unittest
 
-from markdown_blocks import markdown_to_blocks, block_to_block_type, BlockType
+from markdown_blocks import markdown_to_blocks, block_to_block_type, BlockType, markdown_to_html_node
+from htmlnode import HTMLNode
 
 class BlockToBlockType(unittest.TestCase):
     def test_block_to_block_types(self):
@@ -39,5 +40,23 @@ class MarkdownToBlocks(unittest.TestCase):
                 "This is **bolded** paragraph",
                 "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
                 "- This is a list\n- with items",
-            ],
+            ]
         )
+
+class BlockToHTMLNode(unittest.TestCase):
+    def test_block_to_html_node(self):
+        md = "This is **bolded** paragraph\ntext in a p\ntag here\n\nThis is another paragraph with _italic_text and 'code' here"
+        node = markdown_to_html_node(md)
+        self.assertEqual(
+            node,
+            [
+                HTMLNode("p", "This is **bolded** paragraph\ntext in a p\ntag here"),
+                HTMLNode("p", "This is another paragraph with _italic_text and 'code' here"),
+            ]
+        )
+        """html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )"""
+
