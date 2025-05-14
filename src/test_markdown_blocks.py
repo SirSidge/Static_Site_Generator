@@ -47,16 +47,8 @@ class BlockToHTMLNode(unittest.TestCase):
     def test_block_to_html_node(self):
         md = "This is **bolded** paragraph\ntext in a p\ntag here\n\nThis is another paragraph with _italic_text and 'code' here"
         node = markdown_to_html_node(md)
-        self.assertEqual(
-            node,
-            [
-                HTMLNode("p", "This is **bolded** paragraph\ntext in a p\ntag here"),
-                HTMLNode("p", "This is another paragraph with _italic_text and 'code' here"),
-            ]
-        )
-        """html = node.to_html()
+        html = node.to_html()
         self.assertEqual(
             html,
             "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
-        )"""
-
+        )
