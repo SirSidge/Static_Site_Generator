@@ -46,5 +46,9 @@ def markdown_to_blocks(markdown):
     return blocks
 
 def markdown_to_html_node(markdown):
-    print(markdown_to_blocks(markdown))
+    blocks = markdown_to_blocks(markdown)
+    block_types = []
+    for block in blocks:
+        block_types.append(block_to_block_type(block))
+    print(block_types)
     pass
