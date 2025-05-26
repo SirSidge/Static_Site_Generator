@@ -45,17 +45,28 @@ class MarkdownToBlocks(unittest.TestCase):
 
 class BlockToHTMLNode(unittest.TestCase):
     def test_block_to_html_node(self):
-        md = "This is **bolded** paragraph\ntext in a p\ntag here\n\nThis is another paragraph with _italic_text and `code` here"
+        #Paragraph
+        md = "This is **bolded** paragraph\ntext in a p\ntag here\n\nThis is another paragraph with _italic_ text and `code` here"
         node = markdown_to_html_node(md)
-        print("=================")
-        print(node)
-        print("=================")
-        self.assertEqual(
-            "html",
-            "html"
-        )
-        """html = node.to_html()
+        html = node.to_html()
         self.assertEqual(
             html,
             "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+
+        #Heading
+        md = "# #This is my **bolded** Heading!\n\n## And this is my _second_ heading!\n\n### This will be my Third heading!\n\n#### Four!\n\n##### Five!\n\n###### Six!"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h1>#This is my <b>bolded</b> Heading!</h1><h2>And this is my <i>second</i> heading!</h2><h3>This will be my Third heading!</h3><h4>Four!</h4><h5>Five!</h5><h6>Six!</h6></div>",
+        )
+
+        #Code
+"""        md = "```\nThis is text that _should_ remain\nthe **same** even with inline stuff\n```"
+        node = markdown_to_html_node(md)
+        self.assertEqual(
+            node,
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )"""
