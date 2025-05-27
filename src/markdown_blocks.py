@@ -1,8 +1,9 @@
 from enum import Enum
+import re
 
 from inline_markdown import text_to_textnodes
-from textnode import text_node_to_html_node
-from htmlnode import HTMLNode, ParentNode
+from textnode import text_node_to_html_node, TextNode, TextType
+from htmlnode import HTMLNode, ParentNode, LeafNode
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -65,7 +66,10 @@ def markdown_to_html_node(markdown):
             header_counter = new_text.index(" ",0, 7)
             html_nodes.append(HTMLNode(f"h{header_counter}", new_text[(header_counter + 1):]))
         if block_to_block_type(block) == BlockType.CODE:
-            pass
+            block = re.search(r"\`\`\`(.*?)\`\`\`", block, re.S).group(1)
+            if block.startswith("\n"):
+                block = block[1:]
+            html_nodes.append(HTMLNode("pre", "", [LeafNode("code", block)]))
         if block_to_block_type(block) == BlockType.QUOTE:
             pass
         if block_to_block_type(block) == BlockType.ULIST:
