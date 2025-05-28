@@ -73,19 +73,19 @@ class BlockToHTMLNode(unittest.TestCase):
         )
 
         #Quote
-        md = ">"
+        md = ">A pity to be **bold** and afraid."
         node = markdown_to_html_node(md)
         html = node.to_html()
         self.assertEqual(
             html,
-            "<div><blockquote></blockquote></div>",
+            "<div><blockquote>A pity to be <b>bold</b> and afraid.</blockquote></div>",
         )
 
-        """#UList
+        #UList
         md = "- Espresso\n- Americano\n- Cappuccino\n- Latte\n- Mocha\n"
         node = markdown_to_html_node(md)
         html = node.to_html()
         self.assertEqual(
             html,
             "<div><ul><li>Espresso</li><li>Americano</li><li>Cappuccino</li><li>Latte</li><li>Mocha</li></ul></div>",
-        )"""
+        )
