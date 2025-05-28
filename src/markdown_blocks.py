@@ -51,12 +51,6 @@ def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     for i in range(len(blocks)):
         block = blocks[i]
-        if block_to_block_type(block) == BlockType.PARAGRAPH:
-            block = replace_newline(block)
-            child_nodes = text_to_textnodes(block)
-            for r in range(len(child_nodes)):
-                child_nodes[r] = text_node_to_html_node(child_nodes[r])
-            html_nodes.append(HTMLNode("p", "", child_nodes))
         if block_to_block_type(block) == BlockType.HEADING:
             block = replace_newline(block)
             new_nodes = text_to_textnodes(block)
@@ -65,26 +59,36 @@ def markdown_to_html_node(markdown):
                 new_text += text_node_to_html_node(new_nodes[i]).to_html()
             header_counter = new_text.index(" ",0, 7)
             html_nodes.append(HTMLNode(f"h{header_counter}", new_text[(header_counter + 1):]))
-        if block_to_block_type(block) == BlockType.CODE:
+        elif block_to_block_type(block) == BlockType.CODE:
             block = re.search(r"\`\`\`(.*?)\`\`\`", block, re.S).group(1)
             if block.startswith("\n"):
                 block = block[1:]
             html_nodes.append(HTMLNode("pre", "", [LeafNode("code", block)]))
-        if block_to_block_type(block) == BlockType.QUOTE:
+        elif block_to_block_type(block) == BlockType.QUOTE:
             block = replace_newline(block)
             block = block.replace(">", "")
             child_nodes = text_to_textnodes(block)
             for r in range(len(child_nodes)):
                 child_nodes[r] = text_node_to_html_node(child_nodes[r])
             html_nodes.append(HTMLNode("blockquote", "", child_nodes))
-        if block_to_block_type(block) == BlockType.ULIST:
+        elif block_to_block_type(block) == BlockType.ULIST:
             block = block.replace("- ", "")
             child_nodes = block.split("\n")
             for r in range(len(child_nodes)):
                 child_nodes[r] = LeafNode("li", child_nodes[r])
             html_nodes.append(HTMLNode("ul", "", child_nodes))
-        if block_to_block_type(block) == BlockType.OLIST:
-            pass
+        elif block_to_block_type(block) == BlockType.OLIST:
+            block = re.sub(r"(\d\.\s)", "", block)
+            child_nodes = block.split("\n")
+            for r in range(len(child_nodes)):
+                child_nodes[r] = LeafNode("li", child_nodes[r])
+            html_nodes.append(HTMLNode("ol", "", child_nodes))
+        else:
+            block = replace_newline(block)
+            child_nodes = text_to_textnodes(block)
+            for r in range(len(child_nodes)):
+                child_nodes[r] = text_node_to_html_node(child_nodes[r])
+            html_nodes.append(HTMLNode("p", "", child_nodes))
     return ParentNode("div", html_nodes)
 
 def replace_newline(block):

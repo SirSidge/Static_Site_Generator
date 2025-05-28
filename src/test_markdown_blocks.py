@@ -89,3 +89,12 @@ class BlockToHTMLNode(unittest.TestCase):
             html,
             "<div><ul><li>Espresso</li><li>Americano</li><li>Cappuccino</li><li>Latte</li><li>Mocha</li></ul></div>",
         )
+
+        #OList
+        md = "1. One\n2. Two\n3. Three\n4. Four\n5. Five\n"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ol><li>One</li><li>Two</li><li>Three</li><li>Four</li><li>Five</li></ol></div>",
+        )
