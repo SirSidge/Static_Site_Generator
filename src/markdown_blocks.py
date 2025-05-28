@@ -71,7 +71,12 @@ def markdown_to_html_node(markdown):
                 block = block[1:]
             html_nodes.append(HTMLNode("pre", "", [LeafNode("code", block)]))
         if block_to_block_type(block) == BlockType.QUOTE:
-            pass
+            block = replace_newline(block)
+            block = block.replace(">", "")
+            child_nodes = text_to_textnodes(block)
+            for r in range(len(child_nodes)):
+                child_nodes[r] = text_node_to_html_node(child_nodes[r])
+            html_nodes.append(HTMLNode("blockquote", "", child_nodes))
         if block_to_block_type(block) == BlockType.ULIST:
             pass
         if block_to_block_type(block) == BlockType.OLIST:

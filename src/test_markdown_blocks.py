@@ -71,3 +71,21 @@ class BlockToHTMLNode(unittest.TestCase):
             html,
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
+
+        #Quote
+        md = ">"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><blockquote></blockquote></div>",
+        )
+
+        """#UList
+        md = "- Espresso\n- Americano\n- Cappuccino\n- Latte\n- Mocha\n"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ul><li>Espresso</li><li>Americano</li><li>Cappuccino</li><li>Latte</li><li>Mocha</li></ul></div>",
+        )"""
