@@ -12,12 +12,10 @@ print(factorial(5))"""
 
 print(sum_natural(5))"""
 
-nr1 = 0
-nr2 = 1
 def fibonacci(n):
-    if n <= 0:
-        return 1 + 0
-    
+    if n <= 2:
+        return 1
+    return fibonacci(n-1) + fibonacci(n-2)
 
+print(fibonacci(2))
 
-print(fibonacci(6))
