@@ -3,19 +3,17 @@ import os, shutil
 def main():
     shutil.rmtree("public", True)
     os.mkdir("public")
-    static_directories("static")
+    copy_directories("static", "public")
     
-def static_directories(static_dir):
-    if os.path.isfile(static_dir):
-        return static_dir
-    next_level = os.listdir(static_dir)
-    new_dir = "public"
-    for i in range(len(next_level)):
-        if not os.path.isfile(os.path.join(static_dir, next_level[i])):
-            new_dir = os.path.join(new_dir, next_level[i])
-            os.mkdir(new_dir)
-        new_path = static_directories(os.path.join(static_dir, next_level[i]))
-        if type(new_path) is not type(None):
-            shutil.copy(new_path, new_dir)
+def copy_directories(orig, dest):
+    sub_dir = os.listdir(orig)
+    for i in range(len(sub_dir)):
+        if os.path.isfile(os.path.join(orig, sub_dir[i])):
+            print(f"Copying {os.path.join(orig, sub_dir[i])} -> {os.path.join(dest, sub_dir[i])}")
+            shutil.copy(os.path.join(orig, sub_dir[i]), dest)
+        else:
+            if not os.path.exists(os.path.join(dest, sub_dir[i])):
+                os.mkdir(os.path.join(dest, sub_dir[i]))
+            copy_directories(os.path.join(orig, sub_dir[i]), os.path.join(dest, sub_dir[i]))
 
 main()
