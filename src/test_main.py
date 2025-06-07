@@ -3,9 +3,9 @@ import unittest
 from main import extract_title
 
 class MainTestRun(unittest.TestCase):
-    def markdown_header(self):
-        header = "# Heading"
+    def test_markdown_header(self): #Needs the word "test" at the start of the function name "test_markdown_header"
+        header = "# Hello"
         self.assertEqual(
             extract_title(header),
-            "Heading"
+            "Hello"
         )
