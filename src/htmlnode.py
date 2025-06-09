@@ -9,6 +9,7 @@ class HTMLNode():
         raise NotImplementedError("Not Implemented at the moment")
     
     def props_to_html(self):
+        print("props type:", type(self.props), "props value:", self.props)
         if self.props is None:
             return ""
         props = ""
