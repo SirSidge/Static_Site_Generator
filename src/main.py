@@ -56,5 +56,6 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
             generate_page(os.path.join(dir_path_content, item), template_path, dir_path_content.replace("content", "public").replace("md", "html"))
         else:
             generate_pages_recursive(os.path.join(dir_path_content, item), template_path, dest_dir_path)
+            # testing
 
 main()
