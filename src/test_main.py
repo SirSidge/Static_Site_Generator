@@ -7,4 +7,5 @@ class MainTestRun(unittest.TestCase):
         header = "# Hello"
         self.assertEqual(extract_title(header), "Hello")
         header = "* Hello"
-        self.assertEqual(extract_title(header), "* Hello")
+        with self.assertRaises(Exception):
+            extract_title(header)
