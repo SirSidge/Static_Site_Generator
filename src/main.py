@@ -7,7 +7,6 @@ def main():
     if not os.path.exists("public"):
         os.mkdir("public")
     copy_directories("static", "public")
-    #generate_page("content/index.md", "template.html", "public/index.html")
     generate_pages_recursive("content", "template.html", "public/index.html")
     
 def copy_directories(orig, dest):
@@ -42,7 +41,6 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(markdown)
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html_node)
-    copy_directories(template_path, dest_path)
     with open(dest_path, 'w') as f:
         f.write(template)
 
@@ -52,10 +50,12 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
     else:
         return dir_path_content
     for item in sub_dir:
-        if os.path.isfile(os.path.join(dir_path_content, item)):
-            generate_page(os.path.join(dir_path_content, item), template_path, dir_path_content.replace("content", "public").replace("md", "html"))
+        new_dir_path = os.path.join(dir_path_content, item)
+        if os.path.isfile(new_dir_path):
+            temp_dir = os.path.join("public", new_dir_path[8:]).replace("md", "html")
+            os.makedirs(os.path.dirname(temp_dir), exist_ok=True)
+            generate_page(new_dir_path, template_path, temp_dir)
         else:
             generate_pages_recursive(os.path.join(dir_path_content, item), template_path, dest_dir_path)
-            # testing
 
 main()
